@@ -15,11 +15,6 @@ export default defineConfig([
 
   ...nextVitals,
   ...nextTs,
-
-  // Type-aware rules — scoped to extensions tsconfig actually includes.
-  // Don't widen this to .js/.mjs/.cjs or the TS project service will
-  // error on files like this one (eslint.config.mjs isn't in the
-  // app's tsconfig `include`).
   {
     files: ['**/*.{ts,tsx,mts,cts}'],
     extends: [tseslint.configs.recommended],
@@ -42,7 +37,6 @@ export default defineConfig([
     },
   },
 
-  // Plain JS config files (postcss.config.mjs etc.) — base rules only.
   {
     files: ['**/*.{js,mjs,cjs}'],
     extends: [js.configs.recommended],
@@ -54,7 +48,6 @@ export default defineConfig([
     },
   },
 
-  // Project conventions
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {
@@ -72,7 +65,6 @@ export default defineConfig([
     },
   },
 
-  // Server-only files — console logging is expected here
   {
     files: ['**/route.ts', 'middleware.ts', '**/*.actions.ts'],
     rules: { 'no-console': 'off' },
