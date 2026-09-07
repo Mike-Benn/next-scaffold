@@ -6,7 +6,7 @@ import { LogoutButton } from '@/components/Buttons/LogoutButton';
 
 export default async function HomePage() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect('/login');
+  if (!session) redirect('/auth/login');
   return (
     <PageWrapper wrapperClassName="p-6">
       <LogoutButton />
