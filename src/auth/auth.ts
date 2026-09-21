@@ -3,7 +3,7 @@ import { db } from '@/db/db';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import * as schema from '@/db/schema';
 import { APIError } from 'better-auth';
-import { ENV } from '@/env';
+import { envServer } from '@/env.server';
 import { authClient } from '@/auth/auth-client';
 import { createAuthMiddleware } from 'better-auth/api';
 import { eq } from 'drizzle-orm';
@@ -43,7 +43,7 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
-      if (ENV.NODE_ENV === 'development') {
+      if (envServer.NODE_ENV === 'development') {
         console.log(url, user);
       }
       return;
