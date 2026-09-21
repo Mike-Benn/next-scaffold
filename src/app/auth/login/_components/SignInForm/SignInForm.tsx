@@ -8,8 +8,7 @@ import { useState } from 'react';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { CircleAlert } from 'lucide-react';
-import { Separator } from '@base-ui/react';
-import Link from 'next/link';
+
 import { isSignInErrorCode } from '@/app/auth/login/_lib/signInErrors';
 import { revalidateLogic } from '@tanstack/react-form';
 
@@ -18,8 +17,9 @@ const passwordSchema = z.string().min(1, { error: 'Password is required.' });
 
 interface SignInFormProps {
   onEmailNotVerified: (email: string) => void;
+  footerContent: React.ReactNode;
 }
-export function SignInForm({ onEmailNotVerified }: SignInFormProps) {
+export function SignInForm({ onEmailNotVerified, footerContent }: SignInFormProps) {
   const [isPending, setIsPending] = useState(false);
   const [showInvalidCredentialsError, setShowInvalidCredentialsError] = useState(false);
 
@@ -121,16 +121,7 @@ export function SignInForm({ onEmailNotVerified }: SignInFormProps) {
           </div>
         </Form>
       </div>
-      <div>
-        <Separator orientation="horizontal" className="h-px w-full bg-slate-300" />
-      </div>
-      <div className="text-sm text-slate-400 pt-5 font-semibold">
-        New user?{' '}
-        <Link className="text-indigo-700" href="/auth/signup">
-          Register
-        </Link>{' '}
-        for an account
-      </div>
+      {footerContent}
     </>
   );
 }

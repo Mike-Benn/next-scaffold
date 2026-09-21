@@ -7,7 +7,11 @@ import { authClient } from '@/auth/auth-client';
 
 type View = 'form' | 'verification';
 
-export function SignInFlow() {
+interface SignInFlowProps {
+  formFooterContent: React.ReactNode;
+}
+
+export function SignInFlow({ formFooterContent }: SignInFlowProps) {
   const [view, setView] = useState<View>('form');
   const [email, setEmail] = useState('');
   const { data: session, isPending } = authClient.useSession();
@@ -19,13 +23,14 @@ export function SignInFlow() {
       window.location.href = '/';
     }
   }, [session]);
+
   const onEmailNotVerified = (email: string) => {
     setView('verification');
     setEmail(email);
   };
 
   return view === 'form' ? (
-    <SignInForm onEmailNotVerified={onEmailNotVerified} />
+    <SignInForm onEmailNotVerified={onEmailNotVerified} footerContent={formFooterContent} />
   ) : (
     <VerifyEmail email={email} />
   );

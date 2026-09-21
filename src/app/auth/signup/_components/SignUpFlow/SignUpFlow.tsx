@@ -6,7 +6,11 @@ import { useState, useEffect } from 'react';
 import { authClient } from '@/auth/auth-client';
 type View = 'form' | 'verification';
 
-export function SignUpFlow() {
+interface SignUpFlowProps {
+  formFooterContent: React.ReactNode;
+}
+
+export function SignUpFlow({ formFooterContent }: SignUpFlowProps) {
   const [view, setView] = useState<View>('form');
   const [email, setEmail] = useState('');
   const { data: session, isPending } = authClient.useSession();
@@ -25,7 +29,7 @@ export function SignUpFlow() {
   };
 
   return view === 'form' ? (
-    <SignUpForm onFormSuccess={onFormSuccess} />
+    <SignUpForm onFormSuccess={onFormSuccess} footerContent={formFooterContent} />
   ) : (
     <VerifyEmail email={email} />
   );

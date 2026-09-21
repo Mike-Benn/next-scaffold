@@ -10,8 +10,6 @@ import {
 } from '@/app/auth/signup/_types/errors';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import Link from 'next/link';
-import { Separator } from '@base-ui/react';
 import { revalidateLogic } from '@tanstack/react-form';
 
 const emailSchema = z.email('Please enter a valid email.');
@@ -22,9 +20,10 @@ const passwordSchema = z
 
 interface SignUpFormProps {
   onFormSuccess: (email: string) => void;
+  footerContent: React.ReactNode;
 }
 
-export function SignUpForm({ onFormSuccess }: SignUpFormProps) {
+export function SignUpForm({ onFormSuccess, footerContent }: SignUpFormProps) {
   const [isPending, setIsPending] = useState(false);
 
   const form = useAppForm({
@@ -122,15 +121,7 @@ export function SignUpForm({ onFormSuccess }: SignUpFormProps) {
           </form.AppForm>
         </Form>
       </div>
-      <div>
-        <Separator orientation="horizontal" className="h-px w-full bg-slate-300" />
-      </div>
-      <div className="text-sm text-slate-400 pt-5 font-semibold">
-        Have an account?{' '}
-        <Link className="text-indigo-700" href="/auth/login">
-          Log in
-        </Link>
-      </div>
+      {footerContent}
     </>
   );
 }
