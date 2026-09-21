@@ -10,10 +10,11 @@ type View = 'form' | 'verification';
 export function SignInFlow() {
   const [view, setView] = useState<View>('form');
   const [email, setEmail] = useState('');
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
 
   // Redirects automatically if sitting on verify email view and verification is successful in a different tab
   useEffect(() => {
+    if (isPending) return;
     if (session?.user?.emailVerified) {
       window.location.href = '/';
     }
