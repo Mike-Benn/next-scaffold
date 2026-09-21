@@ -27,9 +27,6 @@ export const auth = betterAuth({
           });
         }
       }
-      if (ctx.path === '/sign-in/email') {
-        console.log('route hit');
-      }
     }),
   },
   emailAndPassword: {

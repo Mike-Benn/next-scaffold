@@ -78,9 +78,8 @@ export function SignUpForm({ onFormSuccess, footerContent }: SignUpFormProps) {
               setIsPending(false);
             } else {
               toast.error('Something went wrong on our end. Please try again.');
-              if (process.env.NODE_ENV === 'development') console.error(ctx.error.code);
+              if (process.env.NODE_ENV === 'development') console.error(ctx.error);
             }
-            console.log(ctx.error);
             setIsPending(false);
           },
         },
