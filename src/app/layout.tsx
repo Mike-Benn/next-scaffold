@@ -3,7 +3,10 @@ import './globals.css';
 import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
-  title: 'Base App',
+  title: {
+    template: '%s | Base App', // %s gets replaced by the page title
+    default: 'Base App', // Fallback if a page doesn't define a title
+  },
   description: 'Welcome to Base App',
 };
 
