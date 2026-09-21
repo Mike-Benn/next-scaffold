@@ -12,12 +12,13 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import Link from 'next/link';
 import { Separator } from '@base-ui/react';
+import { revalidateLogic } from '@tanstack/react-form';
 
 const emailSchema = z.email('Please enter a valid email.');
 const passwordSchema = z
   .string()
-  .min(12, 'Your password must contain between 12 and 64 characters.')
-  .max(64, 'Your password must contain between 12 and 64 characters.');
+  .min(12, 'Must be 12-64 characters')
+  .max(64, 'Must be 12-64 characters');
 
 interface SignUpFormProps {
   onFormSuccess: (email: string) => void;
@@ -31,11 +32,9 @@ export function SignUpForm({ onFormSuccess }: SignUpFormProps) {
       email: '',
       password: '',
     },
+    validationLogic: revalidateLogic({ mode: 'submit', modeAfterSubmission: 'change' }),
     validators: {
-      onSubmit: z.object({
-        email: emailSchema,
-        password: passwordSchema,
-      }),
+      onDynamic: z.object({ email: emailSchema, password: passwordSchema }),
     },
     onSubmit: async ({ value }) => {
       const placeholderName = 'default';
@@ -98,18 +97,14 @@ export function SignUpForm({ onFormSuccess }: SignUpFormProps) {
         <Form className="flex flex-col gap-8" onSubmit={(e) => e.preventDefault()}>
           <form.AppField
             name="email"
-            validators={{
-              onBlur: emailSchema,
-            }}
+
             children={(field) => (
               <field.TextField label="Email" placeholder="example@example.com" maxLength={128} />
             )}
           />
           <form.AppField
             name="password"
-            validators={{
-              onBlur: passwordSchema,
-            }}
+
             children={(field) => (
               <field.TextField label="Password" isPassword={true} maxLength={64} />
             )}

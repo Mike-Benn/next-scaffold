@@ -11,12 +11,10 @@ import { CircleAlert } from 'lucide-react';
 import { Separator } from '@base-ui/react';
 import Link from 'next/link';
 import { isSignInErrorCode } from '@/app/auth/login/_lib/signInErrors';
+import { revalidateLogic } from '@tanstack/react-form';
 
 const emailSchema = z.email('Please enter a valid email.');
-const passwordSchema = z
-  .string()
-  .min(12, 'Your password must contain between 12 and 64 characters.')
-  .max(64, 'Your password must contain between 12 and 64 characters.');
+const passwordSchema = z.string().min(1, { error: 'Password is required.' });
 
 interface SignInFormProps {
   onEmailNotVerified: (email: string) => void;
@@ -31,12 +29,11 @@ export function SignInForm({ onEmailNotVerified }: SignInFormProps) {
       email: '',
       password: '',
     },
+    validationLogic: revalidateLogic({ mode: 'submit', modeAfterSubmission: 'change' }),
     validators: {
-      onSubmit: z.object({
-        email: emailSchema,
-        password: passwordSchema,
-      }),
+      onDynamic: z.object({ email: emailSchema, password: passwordSchema }),
     },
+
     onSubmit: async ({ value }) => {
       await authClient.signIn.email(
         {
@@ -82,7 +79,6 @@ export function SignInForm({ onEmailNotVerified }: SignInFormProps) {
           <span className="text-sm">Sign in to continue</span>
         </div>
         <Form
-          className="flex flex-col gap-8"
           onSubmit={(e) => e.preventDefault()}
           onChange={() => {
             if (showInvalidCredentialsError) {
@@ -90,31 +86,27 @@ export function SignInForm({ onEmailNotVerified }: SignInFormProps) {
             }
           }}
         >
-          <form.AppField
-            name="email"
-            validators={{
-              onBlur: emailSchema,
-            }}
-            children={(field) => (
-              <field.TextField label="Email" placeholder="example@example.com" maxLength={128} />
-            )}
-          />
-          <form.AppField
-            name="password"
-            validators={{
-              onBlur: passwordSchema,
-            }}
-            children={(field) => (
-              <field.TextField label="Password" isPassword={true} maxLength={64} />
-            )}
-          />
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-6">
+            <form.AppField
+              name="email"
+              children={(field) => (
+                <field.TextField label="Email" placeholder="example@example.com" maxLength={128} />
+              )}
+            />
+            <form.AppField
+              name="password"
+              children={(field) => (
+                <field.TextField label="Password" isPassword={true} maxLength={64} />
+              )}
+            />
             {showInvalidCredentialsError && (
               <div className="flex items-center gap-1">
                 <CircleAlert color="red" size={16} />
                 <span className="text-red-500 text-sm">Incorrect email or password.</span>
               </div>
             )}
+          </div>
+          <div className="mt-6">
             <form.AppForm>
               <form.SubmitButton
                 className="w-full bg-indigo-700 py-3 rounded-sm text-white flex items-center justify-center gap-3"
