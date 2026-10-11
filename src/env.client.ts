@@ -2,10 +2,12 @@ import { z } from 'zod';
 
 const clientSchema = z.object({
   BETTER_AUTH_URL: z.string(),
+  PUBLIC_URL: z.string(),
 });
 
 const parsed = clientSchema.safeParse({
   BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
+  PUBLIC_URL: process.env.NEXT_PUBLIC_PUBLIC_URL,
 });
 
 if (!parsed.success) {
